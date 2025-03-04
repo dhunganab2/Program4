@@ -7,4 +7,7 @@ include_directories(.)
 
 add_executable(Dhungana_Bijay_prog4CSC402
     mySet.cpp
-    mySet.h)
+    mySet.h
+        OrderedSet.h
+        OrderedSet.cpp
+        main.cpp)
