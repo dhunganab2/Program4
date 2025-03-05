@@ -2,42 +2,17 @@
 #define ORDEREDSET_H
 
 #include "mySet.h"
-#include <algorithm>
 
 class OrderedSet : public mySet {
 public:
-    OrderedSet() = default;
+    OrderedSet();
+    OrderedSet(mySet S);
 
-    OrderedSet(mySet S) {
-        this->elts = S.getelts();
-        this->size = S.getsize();
-        std::sort(this->elts.begin(), this->elts.end());
-    }
+    bool addelt(int x);
+    void SortSet();
 
-    void SortSet() {
-        std::sort(this->elts.begin(), this->elts.end());
-    }
-
-    bool addelt(int x) {
-        if (isfound(x)) return false;
-        mySet::addelt(x);
-        SortSet();
-        return true;
-    }
-
-    OrderedSet operator*(OrderedSet &OS) {
-        mySet ms = mySet::operator*(OS);
-        OrderedSet temp(ms);
-        temp.SortSet();
-        return temp;
-    }
-
-    OrderedSet operator+(OrderedSet &OS) {
-        mySet ms = mySet::operator+(OS);
-        OrderedSet temp(ms);
-        temp.SortSet();
-        return temp;
-    }
+    OrderedSet operator*(OrderedSet &OS);
+    OrderedSet operator+(OrderedSet &OS);
 
     friend OrderedSet operator-(OrderedSet &left, OrderedSet &right);
     friend ostream& operator<<(ostream &ost, OrderedSet &OS);

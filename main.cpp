@@ -5,13 +5,12 @@
 #include "OrderedSet.h"
 using namespace std;
 
-// Helper function to print mySet objects with title and formatting.
+
 void printMySet(const string& title, mySet &S) {
     cout << title << "\n----------------\n";
     cout << S << "\n\n";
 }
 
-// Helper function to print OrderedSet objects with title and formatting.
 void printOrderedSet(const string& title, OrderedSet &OS) {
     cout << title << "\n----------------\n";
     cout << OS << "\n\n";
@@ -98,6 +97,7 @@ int main() {
         cerr << "Error opening file: " << filePath << endl;
         return 1;
     }
+    cout << "\n";
     while (inFile3 >> num) {
         if (S1.addelt(num))
             cout << num << " was successfully added to S1\n";
@@ -117,6 +117,7 @@ int main() {
         cerr << "Error opening file: " << filePath << endl;
         return 1;
     }
+    cout << "\n";
     while (inFile4 >> num) {
         if (S1.deleteelt(num))
             cout << num << " was successfully deleted from S1\n";
@@ -181,8 +182,8 @@ int main() {
     OS5 = OS1 - OS2;
     cout << "After DIFFERENCE Operation of OS1 and OS2 \n\n";
     cout << "MySet OS5 Contents\n----------------\n" << OS5 << "\n\n";
-    printOrderedSet("MySet OS1 Contents", OS1);
-    printOrderedSet("MySet OS2 Contents", OS2);
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+    printOrderedSet("OrderedSet OS2 Contents", OS2);
 
 
     OS6 = OS1 + OS3;
@@ -197,16 +198,17 @@ int main() {
         cout << "OS1 and OS6 ARE NOT EQUAL\n";
 
 
-    cout << "\nPlease enter a path to a third input file : ";
+    cout << "\nPlease enter a path to a third input file :";
     getline(cin, filePath);
     ifstream inFile7(filePath);
     if (!inFile7) {
         cerr << "Error opening file: " << filePath << endl;
         return 1;
     }
+    cout << "\n";
     while (inFile7 >> num) {
         if (OS1.addelt(num))
-            cout << num << " was successfully added to OS1\n";
+            cout <<num << " was successfully added to OS1\n";
         else
             cout << num << " ALREADY PRESENT IN OS1\n";
     }
@@ -223,6 +225,7 @@ int main() {
         cerr << "Error opening file: " << filePath << endl;
         return 1;
     }
+    cout << "\n";
     while (inFile8 >> num) {
         if (OS1.deleteelt(num))
             cout << num << " was successfully deleted from OS1\n";
@@ -237,4 +240,25 @@ int main() {
     cout << "PROGRAM COMPLETE\n";
 
     return 0;
+}
+ostream& operator<<(ostream &ost, OrderedSet &OS) {
+    if (OS.isempty()) {
+        ost << "Ordered Set is EMPTY";
+        return ost;
+    }
+    ost << "{ ";
+    int count = 0;
+    for (size_t i = 0; i < OS.getelts().size(); i++) {
+        ost << OS.getelts()[i];
+        count++;
+        if (i != OS.getelts().size() - 1) {
+            ost << " ,";
+            if (count == 10) {
+                ost << "\n";
+                count = 0;
+            }
+        }
+    }
+    ost << " }";
+    return ost;
 }
