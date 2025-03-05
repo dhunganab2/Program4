@@ -23,7 +23,6 @@ int main() {
     string filePath;
     int num;
 
-    // --- Processing for mySet objects ---
 
     cout << "Please enter a path to an input file : ";
     getline(cin, filePath);
@@ -58,28 +57,28 @@ int main() {
     else
         cout << S3 << "\n\n";
 
-    // UNION
+
     S3 = S1 + S2;
     cout << "After UNION Operation of S1 and S2 \n";
     printMySet("MySet S3 Contents", S3);
     printMySet("MySet S1 Contents", S1);
     printMySet("MySet S2 Contents", S2);
 
-    // INTERSECTION
+
     S4 = S1 * S2;
     cout << "After INTERSECTION Operation of S1 and S2 \n\n";
     printMySet("MySet S4 Contents", S4);
     printMySet("MySet S1 Contents", S1);
     printMySet("MySet S2 Contents", S2);
 
-    // DIFFERENCE
+
     S5 = S1 - S2;
     cout << "After DIFFERENCE Operation of S1 and S2 \n\n";
     printMySet("MySet S5 Contents", S5);
     printMySet("MySet S1 Contents", S1);
     printMySet("MySet S2 Contents", S2);
 
-    // Equivalence Checks
+
     S6 = S1 + S3;
     if (S3 == S6)
         cout << "S3 and S6 ARE EQUAL\n";
@@ -91,7 +90,7 @@ int main() {
     else
         cout << "S1 and S6 ARE NOT EQUAL\n";
 
-    // Addition from third input file
+
     cout << "\nPlease enter a path to a third input file : ";
     getline(cin, filePath);
     ifstream inFile3(filePath);
@@ -110,7 +109,7 @@ int main() {
     cout << "\nS1 AFTER ADDITION of elements\n\n";
     printMySet("MySet S1 Contents", S1);
 
-    // Deletion from fourth input file
+
     cout << "Please enter a path to a fourth input file : ";
     getline(cin, filePath);
     ifstream inFile4(filePath);
@@ -129,7 +128,6 @@ int main() {
     cout << "\nS1 AFTER DELETION of elements\n\n";
     printMySet("MySet S1 Contents", S1);
 
-    // --- Processing for OrderedSet objects ---
 
     cout << "\nOUTPUT FOR ORDERED SETS\n\n";
     cout << "Please enter a path to an input file : ";
@@ -165,28 +163,28 @@ int main() {
     else
         cout << OS3 << "\n\n";
 
-    // UNION for OrderedSet
+
     OS3 = OS1 + OS2;
     cout << "After UNION Operation of OS1 and OS2 \n\n";
     printOrderedSet("OrderedSet OS3 Contents", OS3);
     printOrderedSet("OrderedSet OS1 Contents", OS1);
     printOrderedSet("OrderedSet OS2 Contents", OS2);
 
-    // INTERSECTION for OrderedSet
+
     OS4 = OS1 * OS2;
     cout << "After INTERSECTION Operation of OS1 and OS2 \n\n";
     printOrderedSet("OrderedSet OS4 Contents", OS4);
     printOrderedSet("OrderedSet OS1 Contents", OS1);
     printOrderedSet("OrderedSet OS2 Contents", OS2);
 
-    // DIFFERENCE for OrderedSet (note: sample output shows "MySet OS5 Contents")
+
     OS5 = OS1 - OS2;
     cout << "After DIFFERENCE Operation of OS1 and OS2 \n\n";
     cout << "MySet OS5 Contents\n----------------\n" << OS5 << "\n\n";
     printOrderedSet("MySet OS1 Contents", OS1);
     printOrderedSet("MySet OS2 Contents", OS2);
 
-    // Equivalence Checks for OrderedSet
+
     OS6 = OS1 + OS3;
     if (OS3 == OS6)
         cout << "OS3 and OS6 ARE EQUAL\n";
@@ -198,7 +196,7 @@ int main() {
     else
         cout << "OS1 and OS6 ARE NOT EQUAL\n";
 
-    // Addition from third input file for OrderedSet
+
     cout << "\nPlease enter a path to a third input file : ";
     getline(cin, filePath);
     ifstream inFile7(filePath);
@@ -217,7 +215,7 @@ int main() {
     cout << "\nOS1 AFTER ADDITION of elements\n\n";
     printOrderedSet("OrderedSet OS1 Contents", OS1);
 
-    // Deletion from fourth input file for OrderedSet
+
     cout << "Please enter a path to a fourth input file : ";
     getline(cin, filePath);
     ifstream inFile8(filePath);

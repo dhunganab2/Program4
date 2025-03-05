@@ -11,7 +11,6 @@ protected:
     int size;
 public:
     mySet();
-
     vector<int>& getelts();
     int getsize();
 
@@ -27,12 +26,10 @@ public:
     mySet operator*(mySet &S);
     bool operator==(mySet &other);
 
-    // Friend functions
     friend mySet operator-(const mySet &left, const mySet &right);
     friend ostream& operator<<(ostream &ost, mySet &S);
 };
 
-// **Global declaration of operator-** (so `OrderedSet` can use it properly)
 mySet operator-(const mySet &left, const mySet &right);
 
 #endif
