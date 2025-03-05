@@ -1,164 +1,242 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "mySet.h"
 #include "OrderedSet.h"
-
 using namespace std;
 
-// Function to read integers from a file into a mySet
-void readFromFile(const string& filename, mySet& S) {
-    ifstream file(filename);
-    if (!file) {
-        cout << "Error: Could not open file " << filename << endl;
-        return;
-    }
-    int num;
-    while (file >> num) {
-        S.addelt(num);
-    }
-    file.close();
+// Helper function to print mySet objects with title and formatting.
+void printMySet(const string& title, mySet &S) {
+    cout << title << "\n----------------\n";
+    cout << S << "\n\n";
 }
 
-// Function to read integers from a file and attempt to add them to a set
-void addElementsFromFile(const string& filename, mySet& S) {
-    ifstream file(filename);
-    if (!file) {
-        cout << "Error: Could not open file " << filename << endl;
-        return;
-    }
-    int num;
-    while (file >> num) {
-        if (S.addelt(num)) {
-            cout << num << " was successfully added to S1" << endl;
-        } else {
-            cout << num << " ALREADY PRESENT IN S1" << endl;
-        }
-    }
-    file.close();
-}
-
-// Function to read integers from a file and attempt to delete them from a set
-void deleteElementsFromFile(const string& filename, mySet& S) {
-    ifstream file(filename);
-    if (!file) {
-        cout << "Error: Could not open file " << filename << endl;
-        return;
-    }
-    int num;
-    while (file >> num) {
-        if (S.deleteelt(num)) {
-            cout << num << " was successfully deleted from S1" << endl;
-        } else {
-            cout << num << " NOT FOUND" << endl;
-        }
-    }
-    file.close();
+// Helper function to print OrderedSet objects with title and formatting.
+void printOrderedSet(const string& title, OrderedSet &OS) {
+    cout << title << "\n----------------\n";
+    cout << OS << "\n\n";
 }
 
 int main() {
     mySet S1, S2, S3, S4, S5, S6;
     OrderedSet OS1, OS2, OS3, OS4, OS5, OS6;
-    string filename;
+    string filePath;
+    int num;
 
-    // Read S1 from file
-    cout << "Please enter a path to an input file: ";
-    cin >> filename;
-    readFromFile(filename, S1);
+    // --- Processing for mySet objects ---
 
-    // Read S2 from file
-    cout << "Please enter a path to a second input file: ";
-    cin >> filename;
-    readFromFile(filename, S2);
+    cout << "Please enter a path to an input file : ";
+    getline(cin, filePath);
+    ifstream inFile1(filePath);
+    if (!inFile1) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile1 >> num) {
+        S1.addelt(num);
+    }
+    inFile1.close();
 
-    // Display sets before operations
-    cout << "\nBEFORE OPERATIONS\n";
-    cout << "MySet S1 Contents\n----------------\n" << S1 << endl;
-    cout << "MySet S2 Contents\n----------------\n" << S2 << endl;
-    cout << "MySet S3 Contents\n----------------\nSet is EMPTY\n" << endl;
+    cout << "Please enter a path to a second input file : ";
+    getline(cin, filePath);
+    ifstream inFile2(filePath);
+    if (!inFile2) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile2 >> num) {
+        S2.addelt(num);
+    }
+    inFile2.close();
 
-    // Union operation
+    cout << "\nBEFORE OPERATIONS\n\n";
+    printMySet("MySet S1 Contents", S1);
+    printMySet("MySet S2 Contents", S2);
+    cout << "MySet S3 Contents\n----------------\n";
+    if (S3.isempty())
+        cout << "Set is EMPTY\n\n";
+    else
+        cout << S3 << "\n\n";
+
+    // UNION
     S3 = S1 + S2;
-    cout << "After UNION Operation of S1 and S2\n";
-    cout << "MySet S3 Contents\n----------------\n" << S3 << endl;
+    cout << "After UNION Operation of S1 and S2 \n";
+    printMySet("MySet S3 Contents", S3);
+    printMySet("MySet S1 Contents", S1);
+    printMySet("MySet S2 Contents", S2);
 
-    // Intersection operation
+    // INTERSECTION
     S4 = S1 * S2;
-    cout << "After INTERSECTION Operation of S1 and S2\n";
-    cout << "MySet S4 Contents\n----------------\n" << S4 << endl;
+    cout << "After INTERSECTION Operation of S1 and S2 \n\n";
+    printMySet("MySet S4 Contents", S4);
+    printMySet("MySet S1 Contents", S1);
+    printMySet("MySet S2 Contents", S2);
 
-    // Difference operation
+    // DIFFERENCE
     S5 = S1 - S2;
-    cout << "After DIFFERENCE Operation of S1 and S2\n";
-    cout << "MySet S5 Contents\n----------------\n" << S5 << endl;
+    cout << "After DIFFERENCE Operation of S1 and S2 \n\n";
+    printMySet("MySet S5 Contents", S5);
+    printMySet("MySet S1 Contents", S1);
+    printMySet("MySet S2 Contents", S2);
 
-    // Equivalence check
+    // Equivalence Checks
     S6 = S1 + S3;
-    cout << (S3 == S6 ? "S3 and S6 ARE EQUAL\n" : "S3 and S6 ARE NOT EQUAL\n");
-    cout << (S1 == S6 ? "S1 and S6 ARE EQUAL\n" : "S1 and S6 ARE NOT EQUAL\n");
+    if (S3 == S6)
+        cout << "S3 and S6 ARE EQUAL\n";
+    else
+        cout << "S3 and S6 ARE NOT EQUAL\n";
 
-    // Add elements from file
-    cout << "\nPlease enter a path to a third input file: ";
-    cin >> filename;
-    addElementsFromFile(filename, S1);
-    cout << "\nS1 AFTER ADDITION of elements\nMySet S1 Contents\n----------------\n" << S1 << endl;
+    if (S1 == S6)
+        cout << "S1 and S6 ARE EQUAL\n";
+    else
+        cout << "S1 and S6 ARE NOT EQUAL\n";
 
-    // Delete elements from file
-    cout << "\nPlease enter a path to a fourth input file: ";
-    cin >> filename;
-    deleteElementsFromFile(filename, S1);
-    cout << "\nS1 AFTER DELETION of elements\nMySet S1 Contents\n----------------\n" << S1 << endl;
+    // Addition from third input file
+    cout << "\nPlease enter a path to a third input file : ";
+    getline(cin, filePath);
+    ifstream inFile3(filePath);
+    if (!inFile3) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile3 >> num) {
+        if (S1.addelt(num))
+            cout << num << " was successfully added to S1\n";
+        else
+            cout << num << " ALREADY PRESENT IN S1\n";
+    }
+    inFile3.close();
 
-    // Repeat for OrderedSet
-    cout << "\nProcessing Ordered Sets...\n";
+    cout << "\nS1 AFTER ADDITION of elements\n\n";
+    printMySet("MySet S1 Contents", S1);
 
-    // Read OS1 and OS2
-    cout << "Please enter a path to an input file: ";
-    cin >> filename;
-    readFromFile(filename, OS1);
+    // Deletion from fourth input file
+    cout << "Please enter a path to a fourth input file : ";
+    getline(cin, filePath);
+    ifstream inFile4(filePath);
+    if (!inFile4) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile4 >> num) {
+        if (S1.deleteelt(num))
+            cout << num << " was successfully deleted from S1\n";
+        else
+            cout << num << " NOT FOUND\n";
+    }
+    inFile4.close();
 
-    cout << "Please enter a path to a second input file: ";
-    cin >> filename;
-    readFromFile(filename, OS2);
+    cout << "\nS1 AFTER DELETION of elements\n\n";
+    printMySet("MySet S1 Contents", S1);
 
-    // Display sets before operations
-    cout << "\nBEFORE OPERATIONS\n";
-    cout << "OrderedSet OS1 Contents\n----------------\n" << OS1 << endl;
-    cout << "OrderedSet OS2 Contents\n----------------\n" << OS2 << endl;
-    cout << "OrderedSet OS3 Contents\n----------------\nOrdered Set is EMPTY\n" << endl;
+    // --- Processing for OrderedSet objects ---
 
-    // Union operation
+    cout << "\nOUTPUT FOR ORDERED SETS\n\n";
+    cout << "Please enter a path to an input file : ";
+    getline(cin, filePath);
+    ifstream inFile5(filePath);
+    if (!inFile5) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile5 >> num) {
+        OS1.addelt(num);
+    }
+    inFile5.close();
+
+    cout << "Please enter a path to a second input file : ";
+    getline(cin, filePath);
+    ifstream inFile6(filePath);
+    if (!inFile6) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile6 >> num) {
+        OS2.addelt(num);
+    }
+    inFile6.close();
+
+    cout << "\nBEFORE OPERATIONS\n\n";
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+    printOrderedSet("OrderedSet OS2 Contents", OS2);
+    cout << "OrderedSet OS3 Contents\n----------------\n";
+    if (OS3.isempty())
+        cout << "Ordered Set is EMPTY\n\n";
+    else
+        cout << OS3 << "\n\n";
+
+    // UNION for OrderedSet
     OS3 = OS1 + OS2;
-    cout << "After UNION Operation of OS1 and OS2\n";
-    cout << "OrderedSet OS3 Contents\n----------------\n" << OS3 << endl;
+    cout << "After UNION Operation of OS1 and OS2 \n\n";
+    printOrderedSet("OrderedSet OS3 Contents", OS3);
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+    printOrderedSet("OrderedSet OS2 Contents", OS2);
 
-    // Intersection operation
+    // INTERSECTION for OrderedSet
     OS4 = OS1 * OS2;
-    cout << "After INTERSECTION Operation of OS1 and OS2\n";
-    cout << "OrderedSet OS4 Contents\n----------------\n" << OS4 << endl;
+    cout << "After INTERSECTION Operation of OS1 and OS2 \n\n";
+    printOrderedSet("OrderedSet OS4 Contents", OS4);
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+    printOrderedSet("OrderedSet OS2 Contents", OS2);
 
-    // Difference operation
+    // DIFFERENCE for OrderedSet (note: sample output shows "MySet OS5 Contents")
     OS5 = OS1 - OS2;
-    cout << "After DIFFERENCE Operation of OS1 and OS2\n";
-    cout << "OrderedSet OS5 Contents\n----------------\n" << OS5 << endl;
+    cout << "After DIFFERENCE Operation of OS1 and OS2 \n\n";
+    cout << "MySet OS5 Contents\n----------------\n" << OS5 << "\n\n";
+    printOrderedSet("MySet OS1 Contents", OS1);
+    printOrderedSet("MySet OS2 Contents", OS2);
 
-    // Equivalence check
+    // Equivalence Checks for OrderedSet
     OS6 = OS1 + OS3;
-    cout << (OS3 == OS6 ? "OS3 and OS6 ARE EQUAL\n" : "OS3 and OS6 ARE NOT EQUAL\n");
-    cout << (OS1 == OS6 ? "OS1 and OS6 ARE EQUAL\n" : "OS1 and OS6 ARE NOT EQUAL\n");
+    if (OS3 == OS6)
+        cout << "OS3 and OS6 ARE EQUAL\n";
+    else
+        cout << "OS3 and OS6 ARE NOT EQUAL\n";
 
-    // Add elements to OrderedSet from file
-    cout << "\nPlease enter a path to a third input file: ";
-    cin >> filename;
-    addElementsFromFile(filename, OS1);
-    cout << "\nOS1 AFTER ADDITION of elements\nOrderedSet OS1 Contents\n----------------\n" << OS1 << endl;
+    if (OS1 == OS6)
+        cout << "OS1 and OS6 ARE EQUAL\n";
+    else
+        cout << "OS1 and OS6 ARE NOT EQUAL\n";
 
-    // Delete elements from OrderedSet from file
-    cout << "\nPlease enter a path to a fourth input file: ";
-    cin >> filename;
-    deleteElementsFromFile(filename, OS1);
-    cout << "\nOS1 AFTER DELETION of elements\nOrderedSet OS1 Contents\n----------------\n" << OS1 << endl;
+    // Addition from third input file for OrderedSet
+    cout << "\nPlease enter a path to a third input file : ";
+    getline(cin, filePath);
+    ifstream inFile7(filePath);
+    if (!inFile7) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile7 >> num) {
+        if (OS1.addelt(num))
+            cout << num << " was successfully added to OS1\n";
+        else
+            cout << num << " ALREADY PRESENT IN OS1\n";
+    }
+    inFile7.close();
 
-    cout << "\nPROGRAM COMPLETE\n";
+    cout << "\nOS1 AFTER ADDITION of elements\n\n";
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+
+    // Deletion from fourth input file for OrderedSet
+    cout << "Please enter a path to a fourth input file : ";
+    getline(cin, filePath);
+    ifstream inFile8(filePath);
+    if (!inFile8) {
+        cerr << "Error opening file: " << filePath << endl;
+        return 1;
+    }
+    while (inFile8 >> num) {
+        if (OS1.deleteelt(num))
+            cout << num << " was successfully deleted from OS1\n";
+        else
+            cout << num << " NOT FOUND\n";
+    }
+    inFile8.close();
+
+    cout << "\nOS1 AFTER DELETION of elements\n\n";
+    printOrderedSet("OrderedSet OS1 Contents", OS1);
+
+    cout << "PROGRAM COMPLETE\n";
 
     return 0;
 }

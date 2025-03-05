@@ -1,62 +1,36 @@
 
 #include "OrderedSet.h"
 
-// Constructor converting mySet to OrderedSet
-OrderedSet::OrderedSet(mySet S) {
-    elts = S.getelts();
-    size = S.getsize();
-    SortSet();
-}
-
-// Ensure order when adding elements
-bool OrderedSet::addelt(int x) {
-    if (mySet::addelt(x)) {
-        SortSet();
-        return true;
-    }
-    return false;
-}
-
-// Sort the set
-void OrderedSet::SortSet() {
-    std::sort(elts.begin(), elts.end());
-}
-
-// Overloaded Union operator
-OrderedSet OrderedSet::operator+(OrderedSet& OS) {
-    mySet ms = mySet::operator+(OS);
-    OrderedSet temp(ms);
-    temp.SortSet();
-    return temp;
-}
-
-// Overloaded Intersection operator
-OrderedSet OrderedSet::operator*(OrderedSet& OS) {
-    mySet ms = mySet::operator*(OS);
-    OrderedSet temp(ms);
-    temp.SortSet();
-    return temp;
-}
-
-// Overloaded Difference operator
-OrderedSet operator-(OrderedSet& left, OrderedSet& right) {
+// **Friend function for OrderedSet Difference**
+OrderedSet operator-(OrderedSet &left, OrderedSet &right) {
+    // Calls the global `operator-` for mySet
     mySet ms = operator-(static_cast<mySet&>(left), static_cast<mySet&>(right));
+
+    // Convert `mySet` result to `OrderedSet` and ensure it's sorted
     OrderedSet temp(ms);
     temp.SortSet();
     return temp;
 }
 
-// Overloaded output stream operator
-std::ostream& operator<<(std::ostream& ost, OrderedSet& OS) {
+// **Overloaded `<<` operator for OrderedSet**
+ostream& operator<<(ostream &ost, OrderedSet &OS) {
+    if (OS.isempty()) {
+        ost << "Ordered Set is EMPTY";
+        return ost;
+    }
     ost << "{ ";
-    for (size_t i = 0; i < OS.elts.size(); i++) {
-        ost << OS.elts[i];
-        if ((i + 1) % 10 == 0 || i == OS.elts.size() - 1) {
-            ost << " \n";
-        } else {
-            ost << ", ";
+    int count = 0;
+    for (size_t i = 0; i < OS.getelts().size(); i++) {
+        ost << OS.getelts()[i];
+        count++;
+        if (i != OS.getelts().size() - 1) {
+            ost << " ,";
+            if (count == 10) {
+                ost << "\n";
+                count = 0;
+            }
         }
     }
-    ost << "}";
+    ost << " }";
     return ost;
 }

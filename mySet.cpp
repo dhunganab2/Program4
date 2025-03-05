@@ -1,52 +1,36 @@
 #include "mySet.h"
-#include <algorithm>
-#include <iomanip>
 
-// Constructor
+// Default constructor initializes an empty set
 mySet::mySet() : size(0) {}
 
 // Getters
-std::vector<int>& mySet::getelts() {
-    return elts;
-}
-
-int mySet::getsize() const {
-    return size;
-}
+vector<int>& mySet::getelts() { return elts; }
+int mySet::getsize() { return size; }
 
 // Setters
-void mySet::setelts(const std::vector<int>& newElts) {
-    elts = newElts;
-    size = elts.size();
-}
+void mySet::setelts(const vector<int>& newElts) { elts = newElts; }
+void mySet::setsize(int newSize) { size = newSize; }
 
-void mySet::setsize(int newSize) {
-    size = newSize;
-}
+// Checks if the set is empty
+bool mySet::isempty() { return (size == 0); }
 
-// Check if set is empty
-bool mySet::isempty() const {
-    return size == 0;
-}
-
-// Check if an element exists in the set
+// Checks if an element exists in the set
 bool mySet::isfound(int x) const {
-    return std::find(elts.begin(), elts.end(), x) != elts.end();
+    return find(elts.begin(), elts.end(), x) != elts.end();
 }
 
-// Add an element if it's not already present
+
+// Adds an element only if not already present
 bool mySet::addelt(int x) {
-    if (!isfound(x)) {
-        elts.push_back(x);
-        size++;
-        return true;
-    }
-    return false;
+    if (isfound(x)) return false;
+    elts.push_back(x);
+    size++;
+    return true;
 }
 
-// Delete an element if it exists
+// Deletes an element if found
 bool mySet::deleteelt(int x) {
-    auto it = std::find(elts.begin(), elts.end(), x);
+    auto it = find(elts.begin(), elts.end(), x);
     if (it != elts.end()) {
         elts.erase(it);
         size--;
@@ -55,58 +39,61 @@ bool mySet::deleteelt(int x) {
     return false;
 }
 
-// Union of two sets
-mySet mySet::operator+(const mySet& S) const {
-    mySet result = *this;  // Copy current set
-    for (int val : S.elts) {
-        result.addelt(val); // Add elements from S (ensuring no duplicates)
+// Returns the UNION of two sets
+mySet mySet::operator+(mySet &S) {
+    mySet temp = *this;
+    for (int e : S.elts) {
+        temp.addelt(e);
     }
-    return result;
+    return temp;
 }
 
-// Intersection of two sets
-mySet mySet::operator*(const mySet& S) const {
-    mySet result;
-    for (int val : elts) {
-        if (S.isfound(val)) {
-            result.addelt(val);
-        }
+// Returns the INTERSECTION of two sets
+mySet mySet::operator*(mySet &S) {
+    mySet temp;
+    for (int e : this->elts) {
+        if (S.isfound(e)) temp.addelt(e);
     }
-    return result;
+    return temp;
 }
 
-// Difference of two sets (friend function)
-mySet operator-(const mySet& left, const mySet& right) {
-    mySet result;
-    for (int val : left.elts) {
-        if (!right.isfound(val)) {
-            result.addelt(val);
-        }
+// Checks if two sets are equal (order does not matter)
+bool mySet::operator==(mySet &other) {
+    if (this->size != other.size) return false;
+    for (int e : this->elts) {
+        if (!other.isfound(e)) return false;
     }
-    return result;
+    return true;
 }
 
-// Overloaded output stream operator
-std::ostream& operator<<(std::ostream& ost, const mySet& S) {
+// **Difference operator- (elements in left but NOT in right)**
+mySet operator-(const mySet &left, const mySet &right) {
+    mySet temp;
+    for (int e : left.elts) {
+        if (!right.isfound(e)) temp.addelt(e);
+    }
+    return temp;
+}
+
+// **Overloaded `<<` operator for formatted output**
+ostream& operator<<(ostream &ost, mySet &S) {
+    if (S.isempty()) {
+        ost << "Set is EMPTY";
+        return ost;
+    }
     ost << "{ ";
+    int count = 0;
     for (size_t i = 0; i < S.elts.size(); i++) {
         ost << S.elts[i];
-        if ((i + 1) % 10 == 0 || i == S.elts.size() - 1) {
-            ost << " \n";
-        } else {
-            ost << ", ";
+        count++;
+        if (i != S.elts.size() - 1) {
+            ost << " ,";
+            if (count == 10) {
+                ost << "\n";
+                count = 0;
+            }
         }
     }
-    ost << "}";
+    ost << " }";
     return ost;
-}
-
-// Equivalence operator
-bool mySet::operator==(const mySet& other) const {
-    if (size != other.size) return false;
-    std::vector<int> sortedA = elts;
-    std::vector<int> sortedB = other.elts;
-    std::sort(sortedA.begin(), sortedA.end());
-    std::sort(sortedB.begin(), sortedB.end());
-    return sortedA == sortedB;
 }
